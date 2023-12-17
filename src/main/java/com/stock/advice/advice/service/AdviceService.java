@@ -30,10 +30,7 @@ public class AdviceService {
             advice.getAdviceStocks().add(adviceStock);
         }
         adviceRepository.save(advice);
-
     }
-
-
 
 
 }

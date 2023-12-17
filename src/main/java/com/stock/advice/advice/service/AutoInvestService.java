@@ -24,16 +24,17 @@ public class AutoInvestService {
         int remainRate = portPolioPolicy.getRate();
         List<Stock> stocks = stockService.getAllStocks();
 
-        List<AdviceStock> adviceStocks = new ArrayList<>();
-        makeAdviceStock(stocks, adviceStocks);
-        return adviceStocks;
+
+        return makeAdviceStock(stocks);
     }
-    private static void makeAdviceStock(List<Stock> stocks, List<AdviceStock> adviceStocks) {
+    private List<AdviceStock> makeAdviceStock(List<Stock> stocks) {
+        List<AdviceStock> adviceStocks = new ArrayList<>();
         for(Stock stock : stocks){
             AdviceStock adviceStock = AdviceStock.builder()
                     .stock(stock)
                     .build();
             adviceStocks.add(adviceStock);
         }
+        return adviceStocks;
     }
 }
