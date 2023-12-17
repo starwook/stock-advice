@@ -4,6 +4,7 @@ import com.stock.advice.member.domain.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Advice {
     @JoinColumn(name ="member_id")
     private Member member;
     private int totalPrice;
+    private LocalDateTime localDateTime;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<AdviceStock> adviceStocks = new ArrayList<>();
