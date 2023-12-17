@@ -29,6 +29,7 @@ public class AdviceService {
         if(stocks.isEmpty()) return;
         Advice advice = Advice.builder()
                 .member(member)
+                .totalPrice(0)
                 .localDateTime(LocalDateTime.now())
                 .build();
         for(AdviceStock adviceStock: stocks) {
