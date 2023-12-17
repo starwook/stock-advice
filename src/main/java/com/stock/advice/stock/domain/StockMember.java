@@ -1,7 +1,8 @@
-package com.stock.advice.stock;
+package com.stock.advice.stock.domain;
 
 
 import com.stock.advice.member.domain.Member;
+import com.stock.advice.stock.domain.Stock;
 
 import javax.persistence.*;
 
@@ -16,4 +17,6 @@ public class StockMember {
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+    private int totalPrice;
+    private int amount;
 }

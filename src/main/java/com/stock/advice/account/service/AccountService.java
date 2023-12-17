@@ -62,8 +62,7 @@ public class AccountService {
         Member findMember = memberService.findMember(memberId);
         if(findMember.getAccount()==null) throw new IllegalArgumentException(ACCOUNT_NOT_EXIST);
         Account account = findMember.getAccount();
-        if(account.getBalance()-amount<0) throw new IllegalArgumentException("잔액 부족");
-        account.setBalance(account.getBalance()-amount);
+        account.withDraw(amount);
         makeAccountHistory(account, amount, AccountHistoryType.WITHDRAW);
         return account.getBalance();
     }
@@ -71,10 +70,9 @@ public class AccountService {
         Member findMember = memberService.findMember(memberId);
         if(findMember.getAccount()==null) throw new IllegalArgumentException(ACCOUNT_NOT_EXIST);
         Account account = findMember.getAccount();
-        account.setBalance(account.getBalance()+amount);
+        account.deposit(amount);
         makeAccountHistory(account, amount, AccountHistoryType.DEPOSIT);
         return account.getBalance();
-
     }
     private void makeAccountHistory(Account account, int amount, AccountHistoryType deposit) {
         AccountHistory accountHistory = AccountHistory.builder()

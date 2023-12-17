@@ -1,4 +1,4 @@
-package com.stock.advice.stock;
+package com.stock.advice.stock.domain;
 
 
 import javax.persistence.*;
@@ -13,7 +13,11 @@ public class Stock {
     private String name;
     private int price;
 
+
     @OneToMany(mappedBy = "stock",cascade = CascadeType.ALL)
     private List<StockMember> stockMembers;
+    public void setPrice(int price){
+        this.price = price;
+    }
 
 }

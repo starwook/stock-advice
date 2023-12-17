@@ -27,4 +27,11 @@ public class Account {
     private List<AccountHistory> accountHistories = new ArrayList<>();
 
     private int balance;
+    public void deposit(int amount){
+        this.balance+=amount;
+    }
+    public void withDraw(int amount){
+        if(this.balance-amount<0) throw new IllegalArgumentException("잔액 부족");
+        this.balance -=amount;
+    }
 }
