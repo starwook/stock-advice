@@ -75,4 +75,11 @@ public class MemberService {
         }
         return null;
     }
+    public Member findMember(String memberId){
+        Optional<Member> member = memberRepository.findMemberByMemberId(memberId);
+        if(member.isPresent()) return member.get();
+        else throw new UsernameNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE);
+    }
+
+
 }
