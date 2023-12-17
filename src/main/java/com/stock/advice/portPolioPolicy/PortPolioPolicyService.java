@@ -1,9 +1,7 @@
-package com.stock.advice.advice.service;
+package com.stock.advice.portPolioPolicy;
 
 
-import com.stock.advice.advice.domain.PortPolioPolicy;
 import com.stock.advice.advice.dto.request.MakePortPolioPolicyDto;
-import com.stock.advice.advice.repository.PortPolioPolicyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

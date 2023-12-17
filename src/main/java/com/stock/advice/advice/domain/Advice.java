@@ -1,17 +1,17 @@
 package com.stock.advice.advice.domain;
 
 import com.stock.advice.member.domain.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 @Getter
 public class Advice {
     @Id @GeneratedValue
@@ -19,4 +19,9 @@ public class Advice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
+    private int totalPrice;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<AdviceStock> adviceStocks = new ArrayList<>();
+
 }

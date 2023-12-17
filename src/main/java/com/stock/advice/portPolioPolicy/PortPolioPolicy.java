@@ -1,4 +1,4 @@
-package com.stock.advice.advice.domain;
+package com.stock.advice.portPolioPolicy;
 
 
 import lombok.AllArgsConstructor;

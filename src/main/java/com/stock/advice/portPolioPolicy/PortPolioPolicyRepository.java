@@ -1,6 +1,6 @@
-package com.stock.advice.advice.repository;
+package com.stock.advice.portPolioPolicy;
 
-import com.stock.advice.advice.domain.PortPolioPolicy;
+import com.stock.advice.portPolioPolicy.PortPolioPolicy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 

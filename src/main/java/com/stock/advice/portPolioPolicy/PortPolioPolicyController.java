@@ -1,7 +1,6 @@
-package com.stock.advice.advice.controller;
+package com.stock.advice.portPolioPolicy;
 
 import com.stock.advice.advice.dto.request.MakePortPolioPolicyDto;
-import com.stock.advice.advice.service.PortPolioPolicyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
