@@ -86,6 +86,7 @@ public class SwaggerConfiguration {
                 .securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
     }
 
+
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];

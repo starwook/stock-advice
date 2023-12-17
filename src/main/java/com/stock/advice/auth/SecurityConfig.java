@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .antMatchers("/**").permitAll()
                 .antMatchers("/swagger-ui.html","/swagger/**","/swagger-resources/**",
                 "/webjars/**","/v2/api-docs","/api/v2/**").permitAll()
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
