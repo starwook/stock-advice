@@ -1,8 +1,10 @@
 package com.stock.advice.advice.service;
 
+import com.stock.advice.account.domain.Account;
 import com.stock.advice.advice.domain.Advice;
 import com.stock.advice.advice.domain.AdviceStock;
 import com.stock.advice.advice.dto.respond.GetAdviceDto;
+import com.stock.advice.advice.dto.respond.GetAdviceReturnDto;
 import com.stock.advice.advice.repository.AdviceRepository;
 import com.stock.advice.member.domain.Member;
 import com.stock.advice.member.service.MemberService;
@@ -44,5 +46,20 @@ public class AdviceService {
                         .localDateTime(advice.getLocalDateTime())
                         .build())
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public GetAdviceReturnDto getAdvicesReturn(String memberId){
+        Member member = memberService.findMember(memberId);
+        int investmentAmount = member.getAccount().getInvestmentAmount();
+        int evaluationAmount =0;
+        for(Advice advice: member.getAdvices()){ //N+1 문제
+            evaluationAmount += advice.getTotalPrice();
+        }
+        return GetAdviceReturnDto.builder()
+                .investAmount(investmentAmount)
+                .evaluationAmount(evaluationAmount)
+                .revenue(evaluationAmount-investmentAmount)
+                .revenueRate((float)((evaluationAmount-investmentAmount)/investmentAmount))
+                .build();
     }
 }

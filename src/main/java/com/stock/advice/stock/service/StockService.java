@@ -42,7 +42,7 @@ public class StockService {
         Optional<Stock> stock = stockRepository.findByCode(changePriceDto.getCode());
         if(!stock.isPresent()) throw new IllegalArgumentException("존재하지 않는 코드의 증권입니다.");
         int newPrice = changePriceDto.getNewPrice();
-        changePrice( stock, newPrice);
+        changePrice(stock, newPrice);
     }
 
     private static void changePrice( Optional<Stock> stock, int newPrice) {

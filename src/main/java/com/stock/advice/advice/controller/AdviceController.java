@@ -1,6 +1,7 @@
 package com.stock.advice.advice.controller;
 
 import com.stock.advice.advice.dto.respond.GetAdviceDto;
+import com.stock.advice.advice.dto.respond.GetAdviceReturnDto;
 import com.stock.advice.advice.service.AdviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,10 @@ public class AdviceController {
     @GetMapping("/advices")
     public List<GetAdviceDto> getAdviceDtos(@AuthenticationPrincipal User user){
         return adviceService.getAdvices(user.getUsername());
+    }
+    @GetMapping("/advices/return")
+    public GetAdviceReturnDto getAdvicesReturn(@AuthenticationPrincipal User user){
+        return adviceService.getAdvicesReturn(user.getUsername());
     }
 
 }

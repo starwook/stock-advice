@@ -27,6 +27,8 @@ public class Account {
     private List<AccountHistory> accountHistories = new ArrayList<>();
 
     private int balance;
+    private int investmentAmount;
+    private int evaluationAmount;
     public void deposit(int amount){
         this.balance+=amount;
     }
