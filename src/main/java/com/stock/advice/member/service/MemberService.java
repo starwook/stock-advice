@@ -61,6 +61,7 @@ public class MemberService {
         loginHistoryRepository.save(loginHistory);
         return tokenInfo;
     }
+
     @Transactional
     public List<LoginHistoryDto> getLoginHistories(String memberId){
         Optional<Member> member = memberRepository.findMemberByMemberId(memberId);

@@ -1,6 +1,7 @@
 package com.stock.advice.member.controller;
 
 import com.stock.advice.auth.dto.TokenInfo;
+import com.stock.advice.error.UserNotLoginException;
 import com.stock.advice.member.dto.request.CreateMemberDto;
 import com.stock.advice.member.dto.request.LoginDto;
 import com.stock.advice.member.dto.respond.LoginHistoryDto;
@@ -30,6 +31,7 @@ public class MemberController {
     }
     @GetMapping(value ="/login/histories")
     public List<LoginHistoryDto> getLoginHistories(@AuthenticationPrincipal User user){
+        if(user==null) throw new UserNotLoginException();
         return memberService.getLoginHistories(user.getUsername());
     }
 
