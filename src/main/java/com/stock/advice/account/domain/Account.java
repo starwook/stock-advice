@@ -28,7 +28,6 @@ public class Account {
 
     private int balance;
     private int investmentAmount;
-    private int evaluationAmount;
     public void deposit(int amount){
         this.balance+=amount;
     }

@@ -11,10 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class StockController {
     private final StockService stockService;
@@ -29,11 +30,11 @@ public class StockController {
         return stockService.getStockDtos();
     }
     @PostMapping(value ="/stocks/change")
-    public void changeStockPrice(ChangePriceDto changePriceDto){
+    public void changeStockPrice(@RequestBody ChangePriceDto changePriceDto){
         stockService.changeStockPrice(changePriceDto);
     }
     @PostMapping(value ="/stocks/delete")
-    public void deleteStock(DeleteStockDto deleteStockDto){
+    public void deleteStock(@RequestBody DeleteStockDto deleteStockDto){
         stockService.deleteStock(deleteStockDto);
     }
 }

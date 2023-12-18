@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,33 +23,38 @@ public class AutoInvestService {
     public List<AdviceStock> autoInvest(Account account, String portPolioType){
         PortPolioPolicy portPolioPolicy = portPolioPolicyService.getPortPolioPolicy(portPolioType);
         List<Stock> stocks = stockService.getAllStocks();
-        List<Stock> selectedStocks = makeSelectedStocksOrderByDesc(account, portPolioPolicy, stocks);
-        return makeAdviceStock(selectedStocks);
+        return makeSelectedAdviceStocksOrderByDesc(account, portPolioPolicy, stocks);
     }
-    private List<Stock> makeSelectedStocksOrderByDesc(Account account, PortPolioPolicy portPolioPolicy, List<Stock> stocks) {
+    private List<AdviceStock> makeSelectedAdviceStocksOrderByDesc(Account account, PortPolioPolicy portPolioPolicy, List<Stock> stocks) {
         Collections.sort(stocks,(o1, o2) -> o2.getPrice()-o1.getPrice());
-        List<Stock> selectedStocks = new ArrayList<>();
+        List<AdviceStock> adviceStocks = new ArrayList<>();
         int originalBalance = account.getBalance();
-        int limitBalance = originalBalance*100/ portPolioPolicy.getRate();
+        int limitBalance =  portPolioPolicy.getRate()*originalBalance/100;
         for(int i = 0; i< stocks.size(); i++){
             Stock stock = stocks.get(i);
-            if(originalBalance-stock.getPrice()>=limitBalance){
-                selectedStocks.add(stock);
-                account.setInvestmentAmount(account.getInvestmentAmount()+stock.getPrice());
+            int amount =0;
+            while(originalBalance-stock.getPrice()>=limitBalance){
+                amount++;
                 originalBalance-=stock.getPrice();
             }
-        }
-        return selectedStocks;
-    }
-
-    private List<AdviceStock> makeAdviceStock(List<Stock> stocks) {
-        List<AdviceStock> adviceStocks = new ArrayList<>();
-        for(Stock stock : stocks){
+            if(amount==0) continue;
             AdviceStock adviceStock = AdviceStock.builder()
                     .stock(stock)
+                    .amount(amount)
+                    .price(stock.getPrice())
                     .build();
+            int buyPrice = stock.getPrice()*amount;
+            accountRenew(account, originalBalance, buyPrice);
             adviceStocks.add(adviceStock);
         }
         return adviceStocks;
     }
+
+    private  int accountRenew(Account account, int originalBalance, int buyPrice) {
+        account.setInvestmentAmount(account.getInvestmentAmount()+ buyPrice);
+        account.setBalance(account.getBalance() - buyPrice);
+        return originalBalance;
+    }
+
+
 }

@@ -11,6 +11,7 @@ import com.stock.advice.stock.dto.respond.GetStockDto;
 import com.stock.advice.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StockService {
     private final StockRepository stockRepository;
 
@@ -32,27 +34,32 @@ public class StockService {
         stockRepository.save(newStock);
     }
     public void deleteStock(DeleteStockDto deleteStockDto){
-        Optional<Stock> stock = stockRepository.findByCode(deleteStockDto.getCode());
+        Optional<Stock> stock = stockRepository.findStockByCode(deleteStockDto.getCode());
         if(!stock.isPresent()) throw new IllegalArgumentException("존재하지 않는 코드의 증권입니다.");
         changePrice(stock,0);
         stockRepository.delete(stock.get());
     }
     public void changeStockPrice(ChangePriceDto changePriceDto){
         if(changePriceDto.getNewPrice()<0) throw new IllegalArgumentException("가능하지 않은 새 가격입니다.");
-        Optional<Stock> stock = stockRepository.findByCode(changePriceDto.getCode());
-        if(!stock.isPresent()) throw new IllegalArgumentException("존재하지 않는 코드의 증권입니다.");
-        int newPrice = changePriceDto.getNewPrice();
-        changePrice(stock, newPrice);
+        Optional<Stock> stock = stockRepository.findStockByCode(changePriceDto.getCode());
+        if(stock.isPresent()) {
+            int newPrice = changePriceDto.getNewPrice();
+            changePrice(stock, newPrice);
+        }
+        else throw new IllegalArgumentException("존재하지 않는 코드의 증권입니다.");
+
     }
 
-    private static void changePrice( Optional<Stock> stock, int newPrice) {
+    private void changePrice( Optional<Stock> stock, int newPrice) {
         for(AdviceStock adviceStock : stock.get().getAdviceStocks()){
             int originalStockPrice = adviceStock.getPrice();
-            int gap = originalStockPrice- newPrice;
+            int gap = newPrice-originalStockPrice;
             adviceStock.setPrice(newPrice);
             Advice advice = adviceStock.getAdvice(); //Join하여 N+1문제 해결 필요
             advice.setTotalPrice(advice.getTotalPrice()+(gap*adviceStock.getAmount()));
         }
+        stock.get().setPrice(newPrice);
+        stockRepository.save(stock.get());
     }
 
     public List<GetStockDto> getStockDtos(){

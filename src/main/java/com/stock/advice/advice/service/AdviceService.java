@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +27,19 @@ public class AdviceService {
     public void requestAdvice(String userName,String portPolioType){
         Member member = memberService.findMember(userName);
         List<AdviceStock> stocks = autoInvestService.autoInvest(member.getAccount(),portPolioType);
-        if(stocks.isEmpty()) return;
+        if(stocks.isEmpty()) {
+            return;
+        }
         Advice advice = Advice.builder()
                 .member(member)
                 .totalPrice(0)
                 .localDateTime(LocalDateTime.now())
+                .adviceStocks(new ArrayList<>())
                 .build();
         for(AdviceStock adviceStock: stocks) {
             advice.setTotalPrice(advice.getTotalPrice() + adviceStock.getAmount() * adviceStock.getPrice());
             advice.getAdviceStocks().add(adviceStock);
+            adviceStock.setAdvice(advice);
         }
         adviceRepository.save(advice);
     }
@@ -56,11 +61,12 @@ public class AdviceService {
         for(Advice advice: member.getAdvices()){ //N+1 문제
             evaluationAmount += advice.getTotalPrice();
         }
+
         return GetAdviceReturnDto.builder()
                 .investAmount(investmentAmount)
                 .evaluationAmount(evaluationAmount)
                 .revenue(evaluationAmount-investmentAmount)
-                .revenueRate((float)((evaluationAmount-investmentAmount)/investmentAmount))
+                .revenueRate((investmentAmount ==0) ? 0 : ((float)(evaluationAmount-investmentAmount)/investmentAmount)*100)
                 .build();
     }
 }

@@ -11,5 +11,5 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     @Query("select s from Stock s where s.name = :name or s.code = :code")
     Optional<Stock> checkIfExistStockByNameOrCode(@Param("name")String name,@Param("code") String code);
     @Query("select s from Stock s where s.code = :code")
-    Optional<Stock> findByCode(@Param("code") String code);
+    Optional<Stock> findStockByCode(@Param("code") String code);
 }
